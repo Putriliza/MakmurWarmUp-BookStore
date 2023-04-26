@@ -1,23 +1,24 @@
 import React, {useEffect} from 'react';
-import {useAppDispatch, useAppSelector} from "../redux/store";
-import {fetchCountries} from "../redux/reducers/countries";
-import {BookModel, fetchBooks, addBook} from "../redux/reducers/books";
+import { useSelector, useDispatch } from 'react-redux';
+import { BookModel } from '../models/books';
+import { CountryModel } from '../models/countries';
 
-function App() {
 
-    const {countries} = useAppSelector((state) => state.countries);
-    const {books} = useAppSelector((state) => state.books);
-    const countryDispatch = useAppDispatch();
-    const bookDispatch = useAppDispatch();
+function BookStore() {
+
+    const dispatch = useDispatch();
+    const countries = useSelector((state: any) => state.countries.countries);
+    const books = useSelector((state: any) => state.books.books);
 
     useEffect(() => {
-        countryDispatch(fetchCountries());
-        bookDispatch(fetchBooks());
-    }, []);
-    
+        console.log("1")
+        dispatch.countries.fetchCountries();
+        dispatch.books.fetchBooks();
+    }, [dispatch]);
+
     const addBookHandler = () => {
         const book: BookModel = {
-            title: "Test1",
+            title: "Test2",
             author: "Rebecca Smith",
             isbn: "c26b531a-8909-4125-893b-ea8b47020ec5",
             publishedOn: "2021-10-15T02:58:34.267Z",
@@ -25,7 +26,9 @@ function App() {
             country: "Nigeria",
             imageUrl: "https://picsum.photos/200/300"
         }
-        bookDispatch(addBook(book));
+        console.log("add book");
+        dispatch.books.addBook(book);
+        console.log("add book2");
     }
 
   return (
@@ -33,12 +36,12 @@ function App() {
         <>
             <ul>
                 {
-                    countries.map((item) => <li key={item._id}>{item.name} {item.createdAt}</li>)
+                    countries.map((item: CountryModel) => <li key={item._id}>{item.name} {item.createdAt}</li>)
                 }
             </ul>
             <ul>
                 {
-                    books.map((item) => <li key={item._id}>{item.title}</li>)
+                    books.map((item: BookModel) => <li key={item._id}>{item.title}</li>)
                 }
             </ul>
 
@@ -48,4 +51,4 @@ function App() {
   );
 }
 
-export default App;
+export default BookStore;

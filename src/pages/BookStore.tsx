@@ -2,16 +2,14 @@ import React, {useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { BookModel } from '../models/books';
 import { CountryModel } from '../models/countries';
-
+import { styled } from '@linaria/react';
 
 function BookStore() {
-
     const dispatch = useDispatch();
     const countries = useSelector((state: any) => state.countries.countries);
     const books = useSelector((state: any) => state.books.books);
 
     useEffect(() => {
-        console.log("1")
         dispatch.countries.fetchCountries();
         dispatch.books.fetchBooks();
     }, [dispatch]);
@@ -26,27 +24,31 @@ function BookStore() {
             country: "Nigeria",
             imageUrl: "https://picsum.photos/200/300"
         }
-        console.log("add book");
         dispatch.books.addBook(book);
-        console.log("add book2");
     }
+
+    
+    // const Title = styled.h1`
+    //     color: red;
+    //     font-size: 50px;
+    // `;
+
 
   return (
     <div>
-        <>
-            <ul>
-                {
-                    countries.map((item: CountryModel) => <li key={item._id}>{item.name} {item.createdAt}</li>)
-                }
-            </ul>
-            <ul>
-                {
-                    books.map((item: BookModel) => <li key={item._id}>{item.title}</li>)
-                }
-            </ul>
+        {/* <Title>Book Store</Title> */}
+        <ul>
+            {
+                countries.map((item: CountryModel) => <li key={item._id}>{item.name} {item.createdAt}</li>)
+            }
+        </ul>
+        <ul>
+            {
+                books.map((item: BookModel) => <li key={item._id}>{item.title}</li>)
+            }
+        </ul>
 
-            <button onClick={addBookHandler}>Add Book</button>
-        </>
+        <button onClick={addBookHandler}>Add Book</button>
     </div>
   );
 }

@@ -23,7 +23,7 @@ export const books = {
       ...state,
       books
     }),
-    addBook: (state: BooksState, book: BookModel) => ({
+    addNewBook: (state: BooksState, book: BookModel) => ({
       ...state,
       books: [...state.books, book]
     }),
@@ -40,7 +40,6 @@ export const books = {
     },
     async addBook(book: BookModel): Promise<void> {
       try {
-        console.log("1");
         const response = await fetch("https://5de759a9b1ad690014a4e21e.mockapi.io/api/v1/books", {
           method: "POST",
           body: JSON.stringify(book),
@@ -49,7 +48,7 @@ export const books = {
           }
         });
         const newBook = await response.json();
-        dispatch.books.addBook(newBook);
+        dispatch.books.addNewBook(newBook);
       } catch (error) {
         console.error(error);
       }

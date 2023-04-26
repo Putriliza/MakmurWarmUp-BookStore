@@ -1,13 +1,13 @@
 import './App.css'
 
 import React from 'react';
-import Counter from './Counter';
+import BookStore from './pages/BookStore';
 
 function App() {
   return (
     <div>
       <h1>My App</h1>
-      <Counter />
+      <BookStore />
     </div>
   );
 }

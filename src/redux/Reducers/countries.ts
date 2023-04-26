@@ -1,41 +1,42 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export interface Country {
-    createdAt: string;
-    name: string;
-    id: string;
+export interface CountryModel {
+    createdAt: string,
+    name: string,
+    _id: string
 }
 
-export interface CountriesState {
-    countries: Country[];
-    loading: boolean;
-    error: string | null;
+interface CountriesState {
+    loading: boolean
+    countries: CountryModel[]
 }
 
-const initialState = {
-  countries: [],
-  loading: false,
-  error: null
-};
+const initialState: CountriesState = {
+    loading: false,
+    countries: []
+}
 
-const countriesSlice = createSlice({
-  name: 'countries',
-  initialState,
-  reducers: {
-    getCountriesStart: (state) => {
-      state.loading = true;
-    },
-    getCountriesSuccess: (state, action) => {
-      state.loading = false;
-      state.countries = action.payload;
-    },
-    getCountriesFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
+export const fetchCountries = createAsyncThunk('get/countries', async ():Promise<[CountryModel]> => {
+    const response = await fetch("https://5de759a9b1ad690014a4e21e.mockapi.io/api/v1/countries");
+    return await response.json();
+})
+
+export const countrySlice = createSlice({
+    name: "countries",
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(fetchCountries.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(fetchCountries.fulfilled, (state, action) => {
+            state.countries = action.payload;
+            state.loading = false;
+        });
+        builder.addCase(fetchCountries.rejected, (state) => {
+            state.loading = false;
+        });
     }
-  }
 });
 
-export const { getCountriesStart, getCountriesSuccess, getCountriesFailure } = countriesSlice.actions;
-
-export default countriesSlice.reducer;
+export default countrySlice.reducer;

@@ -1,14 +1,7 @@
-// import { combineReducers } from 'redux';
+import booksReducer from './books';
+import countriesReducer from './countries';
 
-import BooksReducer from './books';
-import CountriesReducer from './countries';
-
-// const rootReducer = combineReducers({
-//     books: BooksReducer,
-//     countries: CountriesReducer
-// });
-
-export default {
-    BooksReducer,
-    CountriesReducer
-}
+export {
+    booksReducer,
+    countriesReducer
+};

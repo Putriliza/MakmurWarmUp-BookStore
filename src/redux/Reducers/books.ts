@@ -1,66 +1,71 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// data
-// [
-// {
-// createdAt: "2022-03-24T19:36:27.944Z",
-// title: "Yemen synthesize Innovative",
-// author: "Rebecca Smith",
-// isbn: "c26b531a-8909-4125-893b-ea8b47020ec5",
-// publishedOn: "2021-10-15T02:58:34.267Z",
-// numberOfPages: 16,
-// country: "Nigeria",
-// imageUrl: "https://picsum.photos/200/300",
-// id: "1"
-// },
-// ]
-
-// types of data
-export interface Book {
-  createdAt: string;
-  title: string;
-  author: string;
-  isbn: string;
-  publishedOn: string;
-  numberOfPages: number;
-  country: string;
-  imageUrl: string;
-  id: string;
+export interface BookModel {
+    createdAt?: string,
+    title: string,
+    author: string,
+    isbn: string,
+    publishedOn: string,
+    numberOfPages: number,
+    country: string,
+    imageUrl: string,
+    _id?: string
 }
 
-export interface BooksState {
-  books: Book[];
-  loading: boolean;
-  error: string | null;
+interface BooksState {
+    loading: boolean
+    books: BookModel[]
 }
 
 const initialState: BooksState = {
-  books: [],
-  loading: false,
-  error: null
-};
+    loading: false,
+    books: []
+}
 
-const booksSlice = createSlice({
-  name: 'books',
-  initialState,
-  reducers: {
-    getBooksStart: (state) => {
-      state.loading = true;
-    },
-    getBooksSuccess: (state, action) => {
-      state.loading = false;
-      state.books = action.payload;
-    },
-    getBooksFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    addBookSuccess: (state, action) => {
-      state.books.push(action.payload);
+export const fetchBooks = createAsyncThunk('get/books', async ():Promise<[BookModel]> => {
+    const response = await fetch("https://5de759a9b1ad690014a4e21e.mockapi.io/api/v1/books");
+    return await response.json();
+})
+
+export const addBook = createAsyncThunk('add/book', async (book: BookModel):Promise<[BookModel]> => {
+    const response = await fetch("https://5de759a9b1ad690014a4e21e.mockapi.io/api/v1/books", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(book)
+    });
+    return await response.json();
+})
+
+
+export const bookSlice = createSlice({
+    name: "books",
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(fetchBooks.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(fetchBooks.fulfilled, (state, action) => {
+            state.books = action.payload;
+            state.loading = false;
+        });
+        builder.addCase(fetchBooks.rejected, (state) => {
+            state.loading = false;
+        });
+
+        builder.addCase(addBook.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(addBook.fulfilled, (state, action) => {
+            state.books = [...state.books, ...action.payload];
+            state.loading = false;
+        });
+        builder.addCase(addBook.rejected, (state) => {
+            state.loading = false;
+        });
     }
-  }
 });
 
-export const { getBooksStart, getBooksSuccess, getBooksFailure, addBookSuccess } = booksSlice.actions;
-
-export default booksSlice.reducer;
+export default bookSlice.reducer;

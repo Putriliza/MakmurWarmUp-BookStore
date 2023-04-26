@@ -1,53 +1,51 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { fetchCountries, fetchBooks, addBook } from '../redux/actions';
-import store from '../redux/store';
+import React, {useEffect} from 'react';
+import {useAppDispatch, useAppSelector} from "../redux/store";
+import {fetchCountries} from "../redux/reducers/countries";
+import {BookModel, fetchBooks, addBook} from "../redux/reducers/books";
 
-const BookStore = () => {
-  const dispatch = useDispatch();
-  
-  useEffect(() => {
-    fetchCountries();
-    fetchBooks();
-  }, [dispatch]);
+function App() {
 
-  const countries = useSelector((state : typeof store.getState) => state.countries);
-  const books = useSelector((state : typeof store.getState) => state.books);
+    const {countries} = useAppSelector((state) => state.countries);
+    const {books} = useAppSelector((state) => state.books);
+    const countryDispatch = useAppDispatch();
+    const bookDispatch = useAppDispatch();
 
-  console.log(countries);
-
-  const handleAddBook = () => {
-    const newBook = {
-      title: 'New Book',
-      author: 'John Doe',
-      isbn: '123456',
-      publishedOn: '2023-04-26T10:00:00.000Z',
-      numberOfPages: 100,
-      country: 'Canada',
-      imageUrl: 'https://picsum.photos/200/300',
-    };
-    // addBook(newBook);
-  };
+    useEffect(() => {
+        countryDispatch(fetchCountries());
+        bookDispatch(fetchBooks());
+    }, []);
+    
+    const addBookHandler = () => {
+        const book: BookModel = {
+            title: "Test1",
+            author: "Rebecca Smith",
+            isbn: "c26b531a-8909-4125-893b-ea8b47020ec5",
+            publishedOn: "2021-10-15T02:58:34.267Z",
+            numberOfPages: 16,
+            country: "Nigeria",
+            imageUrl: "https://picsum.photos/200/300"
+        }
+        bookDispatch(addBook(book));
+    }
 
   return (
     <div>
-      <h2>Countries</h2>
-      <ul>
-        {countries.map((country : any) => (
-          <li key={country.id}>{country.name}</li>
-        ))}
-      </ul>
-      <h2>Books</h2>
-      <button onClick={handleAddBook}>Add Book</button>
-      <ul>
-        {books.map((book : any) => (
-          <li key={book.id}>
-            {book.title} by {book.author}
-          </li>
-        ))}
-      </ul>
+        <>
+            <ul>
+                {
+                    countries.map((item) => <li key={item._id}>{item.name} {item.createdAt}</li>)
+                }
+            </ul>
+            <ul>
+                {
+                    books.map((item) => <li key={item._id}>{item.title}</li>)
+                }
+            </ul>
+
+            <button onClick={addBookHandler}>Add Book</button>
+        </>
     </div>
   );
 }
 
-export default BookStore;
+export default App;

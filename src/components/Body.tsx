@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { BookModel } from '../models/books';
-import { CountryModel } from '../models/countries';
-import { styled } from '@linaria/react';
+// import { styled } from '@linaria/react';
 
 import Card from './Card';
 import Modal from './Modal';
@@ -21,8 +20,6 @@ const Body = () => {
     //     color: red;
     //     font-size: 50px;
     // `;
-
-    console.log(isModalOpen);
 
     window.onclick = function(event: any) {
         const modal = document.getElementById("myModal");

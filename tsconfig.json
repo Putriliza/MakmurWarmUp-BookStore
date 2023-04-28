@@ -19,7 +19,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    "types": ["@linaria/react"],
+    "types": ["@linaria/react","jest", "@testing-library/jest-dom", "node"],
+    "esModuleInterop": true,
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

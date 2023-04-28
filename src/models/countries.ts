@@ -22,7 +22,7 @@ export const countries = {
         const countries = await response.json();
         dispatch.countries.setCountries(countries);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     },
   }),

@@ -27,7 +27,7 @@ const Select = ({ label, options, ...rest }: SelectProps) => {
             <label>{label}</label>
             <select id={`input-${label}`} {...rest}>
                 {options.map((option) => (
-                    <option value={option}>{option}</option>
+                    <option key={option} value={option}>{option}</option>
                 ))}
             </select>
         </div>
@@ -134,7 +134,7 @@ const Modal = ({ onClose }: ModalProps) => {
           <div className="modal-content">
             <div className="modal-header">
                 <h3>Add Book</h3>
-                <button onClick={onClose} className="close">&times;</button>
+                <button name="close-modal" onClick={onClose} className="close">&times;</button>
             </div>
             <hr />
             <div className="modal-body">

@@ -35,7 +35,7 @@ export const books = {
         const books = await response.json();
         dispatch.books.setBooks(books);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     },
     async addBook(book: BookModel): Promise<void> {
@@ -50,7 +50,7 @@ export const books = {
         const newBook = await response.json();
         dispatch.books.addNewBook(newBook);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     },
   }),

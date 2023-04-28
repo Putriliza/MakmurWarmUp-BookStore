@@ -1,6 +1,16 @@
 import { BookModel } from "../models/books"
 
 const Card = (book: BookModel) => {
+    const displayDate = (date: string) => {
+        const dateObj = new Date(date);
+        const month = dateObj.toLocaleString('default', { month: 'long' });
+        const day = dateObj.getDate();
+        const year = dateObj.getFullYear();
+
+        return `${month} ${day}, ${year}`;
+    }
+
+
     return (
         <div className="card">
             <div className="card-details">
@@ -19,7 +29,7 @@ const Card = (book: BookModel) => {
                     </div>
                     <div>
                         <p className="text-secondary">Published On</p>
-                        <p>{book.publishedOn}</p>
+                        <p>{displayDate(book.publishedOn)}</p>
                     </div>
                     <div>
                         <p className="text-secondary">Country Publisher</p>
